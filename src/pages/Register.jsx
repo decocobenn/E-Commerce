@@ -1,0 +1,96 @@
+import styled from "styled-components";
+import { useState } from "react";
+import { mobile } from '../../src/responsive'
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../redux/apiCalls";
+const Container = styled.div`
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("https://images.pexels.com/photos/5886041/pexels-photo-5886041.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940") center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+const Wraper = styled.div`
+    width: 40%;  
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    ${mobile({
+        width: '75%'
+    })}
+`
+const Title = styled.h1`
+    font-size: 24px;
+    font-weight: 300;
+`
+const Form = styled.form`
+    display: flex;
+    flex-wrap: wrap;
+`
+const Input = styled.input`
+    flex: 1;
+    min-width: 40%;
+    margin: 20px 10px 0px 0px ;
+    padding: 10px;
+`
+const Agreement = styled.span`
+    font-size: 12px;
+    margin: 20px 0px;
+`
+const Button = styled.button`
+    width: 40%;
+    border: none;
+    padding: 15px 20px;
+    background-color: teal;
+    font-color: white;
+    cursor: pointer;
+    border-radius: 10px;
+`
+const Error = styled.span`
+    color: red;
+`
+
+const Register = () => {
+    const [name, setName] = useState('');
+    const [lastname, setLastname] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmpas, setConfirmpas] = useState('');
+    const [email, setEmail] = useState('');
+
+    const dispatch = useDispatch();
+    const {isFetching, error} = useSelector((state) => state.user)
+
+    const handleRegister = (e) => {
+        e.preventDefault();
+        if (password !== confirmpas) {
+            alert("Password not match");
+        } else {
+            register(dispatch, {name, lastname, username, password, email});
+        }
+    }
+    return (
+        <Container>
+            <Wraper>
+                <Title>CREATE AN ACOUNT</Title>
+                <Form>
+                    <Input placeholder="name" onChange={(e) => setName(e.target.value)}/>
+                    <Input placeholder="lastname" onChange={(e) => setLastname(e.target.value)  }/>
+                    <Input placeholder="email" onChange={(e) => setEmail(e.target.value)  }/>
+                    <Input placeholder="username" onChange={(e) => setUsername(e.target.value)  }/>
+                    <Input placeholder="password" onChange={(e) => setPassword(e.target.value)  }/>
+                    <Input placeholder="confirm pasword" onChange={(e) => setConfirmpas(e.target.value)  }/>
+                    <Agreement>
+                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis, eius!
+                    </Agreement>
+                    <Button onClick={handleRegister} disabled={isFetching}>CREATE</Button>
+                    {error && <Error>Something Went Wrong</Error>}
+                </Form>
+            </Wraper>
+        </Container>
+    )
+}
+
+export default Register
